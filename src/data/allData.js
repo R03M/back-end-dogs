@@ -69,7 +69,7 @@ const getDogsDB = async () => {
       maxHeightCm: e.maxHeightCm,
       minWeightKg: e.minWeightKg,
       maxWeightKg: e.maxWeightKg,
-      temperament: e.tempers ? e.tempers.map((e) => e.name) : ["n/a"],
+      temperament: e.tempers?.map((e) => e.name),
       minLifeSpanYears: e.minLifeSpanYears,
       maxLifeSpanYears: e.maxLifeSpanYears,
     };
