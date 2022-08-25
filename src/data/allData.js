@@ -34,25 +34,17 @@ const getTemp = async () => {
   const apiInf = await getInfAPI();
   const temperaments = apiInf.map((e) => e.temperament);
   const tempEnd = temperaments.flat().filter((i, e, a) => a.indexOf(i) === e);
-  try {
-    if (!(await Temper.findAll()).length) {
-      await Temper.bulkCreate(
-        tempEnd.map((e) => {
-          return {
-            name: e,
-          };
-        })
-      );
-      console.log(`Guarded tempers`);
-    } else {
-      console.log(`Temperaments already saved`);
-    }
-   } catch (error){
-    console.log('hola que################################################################################################');
-   console.log(error);
-  }
+
+  await Temper.bulkCreate(
+    tempEnd.map((e) => {
+      return {
+        name: e,
+      };
+    })
+  );
 };
 getTemp();
+console.log(`Guarded tempers`);
 
 const getDogsDB = async () => {
   const dogsDB = await Dog.findAll({
