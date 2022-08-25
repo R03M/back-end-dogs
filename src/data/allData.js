@@ -32,11 +32,13 @@ const getInfAPI = async () => {
 
 const getTemp = async () => {
   try {
+    const temperDB = (await Temper.findAll()).length;
     const apiInf = await getInfAPI();
     const temperaments = apiInf.map((e) => e.temperament);
-    const tempEnd = temperaments.flat().filter((i, e, a) => a.indexOf(i) === e);
-    const temperDB = (await Temper.findAll()).length;
-
+    const tempEnd = temperaments
+    .flat()
+    .filter((i, e, a) => a.indexOf(i) === e);
+    
     if (temperDB === 0) {
       await Temper.bulkCreate(
         tempEnd.map((e) => {
@@ -45,6 +47,7 @@ const getTemp = async () => {
           };
         })
       );
+      console.log(`Temperaments created`);
     } else {
       console.log(`Temperaments already created`);
     }
