@@ -34,18 +34,17 @@ const getTemp = async () => {
   try {
     const apiInf = await getInfAPI();
     const temperaments = apiInf.map((e) => e.temperament);
-    const tempEnd = temperaments
-    .flat()
-    .filter((i, e, a) => a.indexOf(i) === e);
-    
-      await Temper.bulkCreate(
-        tempEnd.map((e) => {
-          return {
-            name: e,
-          };
-        })
-      );
-      console.log(`Temperaments created`);
+    const tempEnd = temperaments.flat().filter((i, e, a) => a.indexOf(i) === e);
+
+    await Temper.bulkCreate(
+      tempEnd.map((e) => {
+        return {
+          name: e,
+        };
+      }),
+      { validate: true }
+    );
+    console.log(`Temperaments created`);
   } catch (error) {
     console.log(error);
   }
