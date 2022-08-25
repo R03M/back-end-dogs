@@ -7,7 +7,11 @@ const getInfAPI = async () => {
   const dogs = info.data.map((e) => {
     let height = e.height.metric.split("-").map((e) => e.trim());
     let weight = e.weight.metric.split("-").map((e) => e.trim());
-    let lifeSpan = e.life_span.replace("years", '').trim().split("-").map((e) => e.trim());
+    let lifeSpan = e.life_span
+      .replace("years", "")
+      .trim()
+      .split("-")
+      .map((e) => e.trim());
     return {
       id: e.id,
       name: e.name,
@@ -16,10 +20,9 @@ const getInfAPI = async () => {
       maxHeightCm: parseInt(height[1]),
       minWeightKg: parseInt(weight[0]),
       maxWeightKg: parseInt(weight[1]),
-      temperament: (e.temperament
-        ? e.temperament.split(",")
-        : ["n/a"]
-      ).map((e) => e.trim()),
+      temperament: (e.temperament ? e.temperament.split(",") : ["n/a"]).map(
+        (e) => e.trim()
+      ),
       minLifeSpanYears: parseInt(lifeSpan[0]),
       maxLifeSpanYears: parseInt(lifeSpan[1]),
     };
@@ -31,16 +34,20 @@ const getTemp = async () => {
   const apiInf = await getInfAPI();
   const temperaments = apiInf.map((e) => e.temperament);
   const tempEnd = temperaments.flat().filter((i, e, a) => a.indexOf(i) === e);
-  await Temper.bulkCreate(
-    tempEnd.map((e) => {
-      return {
-        name: e,
-      };
-    })
-  );
+  if (!(await Temper.findAll()).length) {
+    await Temper.bulkCreate(
+      tempEnd.map((e) => {
+        return {
+          name: e,
+        };
+      })
+    );
+    console.log(`Guarded tempers`);
+  } else {
+    console.log(`Temperaments already saved`);
+  }
 };
 getTemp();
-console.log(`Guarded tempers`);
 
 const getDogsDB = async () => {
   const dogsDB = await Dog.findAll({
