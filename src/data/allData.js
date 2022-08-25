@@ -50,6 +50,7 @@ const getDogsDB = async () => {
   const dogsDB = await Dog.findAll({
     include: [{ model: Temper, through: { attributes: [] } }],
   });
+  console.log(JSON.stringify(dogsDB, null, 2));
   const dogs = dogsDB.map((e) => {
     return {
       id: e.id,
