@@ -48,23 +48,12 @@ console.log(`Guarded tempers`);
 
 const getDogsDB = async () => {
   const dogsDB = await Dog.findAll({
-    include: [{ model: Temper, through: { attributes: [] } }],
+    include: [
+      { model: Temper, attributes: ["name"], through: { attributes: [] } },
+    ],
   });
-  const dogs = dogsDB.map((e) => {
-    return {
-      id: e.id,
-      name: e.name,
-      image: e.image,
-      minHeightCm: e.minHeightCm,
-      maxHeightCm: e.maxHeightCm,
-      minWeightKg: e.minWeightKg,
-      maxWeightKg: e.maxWeightKg,
-      temperament: e.tempers.map((e) => e.name),
-      minLifeSpanYears: e.minLifeSpanYears,
-      maxLifeSpanYears: e.maxLifeSpanYears,
-    };
-  });
-  return dogs;
+ console.log(dogsDB);
+  return dogsDB;
 };
 
 const allDogs = async () => {
