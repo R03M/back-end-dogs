@@ -35,16 +35,20 @@ const getTemp = async () => {
   const temperaments = apiInf.map((e) => e.temperament);
   const tempEnd = temperaments.flat().filter((i, e, a) => a.indexOf(i) === e);
 
-  await Temper.bulkCreate(
-    tempEnd.map((e) => {
-      return {
-        name: e,
-      };
-    })
-  );
+  if (!(await Temper.findAll()).length) {
+    await Temper.bulkCreate(
+      tempEnd.map((e) => {
+        return {
+          name: e,
+        };
+      })
+    );
+    console.log(`Temperaments created`);
+  } else {
+    console.log(`Temperaments already created`);
+  }
 };
 getTemp();
-console.log(`Temperaments created`);
 
 const getDogsDB = async () => {
   const dogsDB = await Dog.findAll({
