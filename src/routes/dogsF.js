@@ -24,8 +24,12 @@ const dogsId = async (req, res) => {
   const allInf = await allDogs();
 
   try {
-    const idFilter = allInf.find((e) => e.id === parseInt(id) || e.id === id);
-    res.send(idFilter);
+    const idFilter = allInf.filter((e) => e.id === parseInt(id) || e.id === id);
+  
+    Object.entries(idFilter).length
+      ? res.send(idFilter[0])
+      : res.send(`Non-existent`);
+
   } catch (error) {
     res.send(error);
   }
