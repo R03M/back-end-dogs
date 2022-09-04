@@ -71,4 +71,58 @@ const dogsCreate = async (req, res) => {
   }
 };
 
-module.exports = { dogsInf, dogsId, dogsCreate };
+const dogsUpdate = async (req, res) => {
+  const { id } = req.params;
+  const {
+    name,
+    image,
+    minHeightCm,
+    maxHeightCm,
+    minWeightKg,
+    maxWeightKg,
+    minLifeSpanYears,
+    maxLifeSpanYears,
+    temper,
+  } = req.body;
+  try {
+    const dog = await Dog.findByPk(id);
+    dog.set({
+      name,
+      image,
+      minHeightCm,
+      maxHeightCm,
+      minWeightKg,
+      maxWeightKg,
+      minLifeSpanYears,
+      maxLifeSpanYears,
+    });
+
+    await dog.save();
+
+    let tempers = await Temper.findAll({
+      where: {
+        name: temper,
+      },
+    });
+    await dog.setTempers(tempers);
+    res.send("Actualizacion correcta");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteDog = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Dog.destroy({
+      where: {
+        id: id,
+      },
+    });
+    res.send("Raza eliminada");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { dogsInf, dogsId, dogsCreate, dogsUpdate, deleteDog };
