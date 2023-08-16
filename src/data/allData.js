@@ -1,9 +1,8 @@
 const axios = require("axios");
 const { Dog, Temper } = require("../db.js");
-const { URL_API } = process.env;
 
 const getInfAPI = async () => {
-  const info = await axios.get(URL_API);
+  const info = await axios.get("https://api.thedogapi.com/v1/breeds");
   const dogs = info.data.map((e) => {
     let height = e.height.metric.split("-").map((e) => e.trim());
     let weight = e.weight.metric.split("-").map((e) => e.trim());
