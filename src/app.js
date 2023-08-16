@@ -1,42 +1,43 @@
 require("dotenv").config();
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const routes = require('./routes/index.js');
-const { CORS_URL } = process.env
-
-require('./db.js');
-
+require("./db.js");
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const routes = require("./routes/index.routes.js");
+const { CORS_URL } = process.env;
 const server = express();
 
-server.name = 'API';
+server.name = "API";
 
-server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-server.use(bodyParser.json({ limit: '50mb' }));
+server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+server.use(bodyParser.json({ limit: "50mb" }));
 server.use(cookieParser());
-server.use(morgan('dev'));
+server.use(morgan("dev"));
 server.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', CORS_URL); // update to match the domain you will make the request from
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.header("Access-Control-Allow-Origin", CORS_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 });
 
-server.use('/', routes);
+server.use("/", routes);
 
-server.use((req, res, next) => {
-  const error = new Error('Not Found');
-  error.status = 404;
-  next(error);
+server.get("/", (req, res) => {
+  res.send("Welcome to Api of Breeds");
 });
 
-// Error catching endware.
-server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+server.use((req, res, next) => {
+  res.status(404).send("Not Found");
+});
+
+server.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || err;
-  console.error(err);
   res.status(status).send(message);
 });
 

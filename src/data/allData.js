@@ -1,9 +1,9 @@
 const axios = require("axios");
 const { Dog, Temper } = require("../db.js");
-const Link = `https://api.thedogapi.com/v1/breeds`;
+const { URL_API } = process.env;
 
 const getInfAPI = async () => {
-  const info = await axios.get(Link);
+  const info = await axios.get(URL_API);
   const dogs = info.data.map((e) => {
     let height = e.height.metric.split("-").map((e) => e.trim());
     let weight = e.weight.metric.split("-").map((e) => e.trim());
@@ -15,7 +15,7 @@ const getInfAPI = async () => {
     return {
       id: e.id,
       name: e.name,
-      image: e.image.url,
+      image: e.reference_image_id,
       minHeightCm: parseInt(height[0]),
       maxHeightCm: parseInt(height[1]),
       minWeightKg: parseInt(weight[0]),
@@ -48,7 +48,6 @@ const getTemp = async () => {
     console.log(`Temperaments already created`);
   }
 };
-getTemp();
 
 const getDogsDB = async () => {
   const dogsDB = await Dog.findAll({
@@ -78,4 +77,4 @@ const allDogs = async () => {
   return dBDogs.concat(apiDogs);
 };
 
-module.exports = { allDogs };
+module.exports = { getTemp, allDogs };

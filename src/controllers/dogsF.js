@@ -1,5 +1,5 @@
 const { Dog, Temper } = require("../db.js");
-const { allDogs } = require("../data/allData");
+const { allDogs } = require("../data/allData.js");
 
 const dogsInf = async (req, res) => {
   const allInf = await allDogs();

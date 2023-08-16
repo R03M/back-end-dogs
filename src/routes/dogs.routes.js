@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { dogsInf, dogsId, dogsCreate, dogsUpdate, deleteDog } = require("./dogsF.js");
+const { dogsInf, dogsId, dogsCreate, dogsUpdate, deleteDog } = require("../controllers/dogsF.js");
 
 router.get("/", dogsInf);
 router.get("/:id", dogsId)
